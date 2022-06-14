@@ -93,27 +93,6 @@ def save_data(df: pd.DataFrame, name: str):
 
 if __name__ == '__main__':
     base_path = 'C:\\Users\\Jelle\\Documents\\GitHub\\pydreamer_jelle\\mlruns\\0\\'
-    
-    # dreamer_files = ['1ccf707282f34a4a997c2eb54dea3732',
-    #                 '014484d1e6c640e59e80b3920dea6acc',
-    #                 '2e0012ae0f2747c79452dacf6e8399a3',
-    #                 'c865f902a2af42369c359572a505a781',
-    #                 '41b84bc4485d419faf81fce628932954',
-    #                 ]
-    
-    # mean_ccn_instance_files = ['e8ac5bd8238949c9aaf76549d929fe26',
-    #                             '1507955ff2be4bebafd7fc4446cbcac5',
-    #                             '60c5ff2ace7a47f1bb966816fbd7a5ef',
-    #                             'c865f902a2af42369c359572a505a781',
-    #                             '55413d36307943c89e5687bb47d8ed57',
-    #                             ]
-
-    # mean_only_files = ['f035065c76a546789df96a6a5fc19f74',
-    #                     '665a4ec1be62444bafe64670f4db81e4',
-    #                     '77eb5cbeb06241af9531f3633a3e1de7',
-    #                     '42efe8fb5caa482698da6de4906fd08d',
-    #                     'ce3c9acb734e4a4498801e6dd0efbdb0',
-    #                     ]
 
     instance_norm_files = ['02898ba8445444bdb4846efaf4553bf9',
                            'ff62d5a41a69456aa1999681b2696a54',
@@ -126,26 +105,26 @@ if __name__ == '__main__':
 
     metric = metrics[2]
 
-    # df_dreamer = get_data(base_path, dreamer_files, metric) 
-    # calc_metrics(df_dreamer)
-    # df_inst = get_data(base_path, mean_ccn_instance_files, metric) 
-    # calc_metrics(df_inst)
-    # df_mean = get_data(base_path, mean_only_files, metric) 
-    # calc_metrics(df_mean)
-    # df_instance = get_data(base_path, instance_norm_files, metric) 
-    # calc_metrics(df_instance)
     df_dreamer = load_from_csv('data/dreamer_normal.csv')
     df_inst = load_from_csv('data/cnn_mean_instance.csv')
     df_mean = load_from_csv('data/cnn_mean_only.csv')
-    df_instance = load_from_csv('data/cnn_instance_norm.csv')
+    df_2dinstance = load_from_csv('data/conv2d_instance_norm.csv')
+    df_3dinstance = load_from_csv('data/3d_instancenorm.csv')
 
     save_data(df_dreamer, 'dreamer_normal')
     save_data(df_inst, 'cnn_mean_instance')
     save_data(df_mean, 'cnn_mean_only')
-    save_data(df_instance, 'cnn_instance_norm')
+    save_data(df_2dinstance, 'conv2d_instance_norm')
+    save_data(df_3dinstance, '3d_instancenorm')
+
     plot_fitted_line(df_dreamer)
     plot_fitted_line(df_inst)
     plot_fitted_line(df_mean)
-    plot_fitted_line(df_instance)
-    compare_two_runs(df_dreamer, df_instance)
-    compare_runs([(df_dreamer, 'dreamer'), (df_inst, 'instance'), (df_mean, 'mean only'), (df_instance, '2d instance')])
+    plot_fitted_line(df_2dinstance)
+    plot_fitted_line(df_3dinstance)
+
+    compare_two_runs(df_dreamer, df_2dinstance)
+    compare_two_runs(df_dreamer, df_3dinstance)
+    compare_two_runs(df_3dinstance, df_2dinstance)
+
+    compare_runs([(df_dreamer, 'dreamer'), (df_inst, 'instance'), (df_mean, 'mean only'), (df_2dinstance, '2d instance')])
