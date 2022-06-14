@@ -93,7 +93,7 @@ def save_data(df: pd.DataFrame, name: str):
 
 if __name__ == '__main__':
     base_path = 'C:\\Users\\Jelle\\Documents\\GitHub\\pydreamer_jelle\\mlruns\\0\\'
-
+    
     instance_norm_files = ['02898ba8445444bdb4846efaf4553bf9',
                            'ff62d5a41a69456aa1999681b2696a54',
                            '14d8fd0e2ee3498ea110afdc2dffb1ee',
@@ -105,6 +105,9 @@ if __name__ == '__main__':
 
     metric = metrics[2]
 
+    # df_instance = get_data(base_path, instance_norm_files, metric) 
+    # calc_metrics(df_instance)
+    
     df_dreamer = load_from_csv('data/dreamer_normal.csv')
     df_inst = load_from_csv('data/cnn_mean_instance.csv')
     df_mean = load_from_csv('data/cnn_mean_only.csv')
