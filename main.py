@@ -73,10 +73,10 @@ def compare_runs(dfs: List[pd.DataFrame], title:str):
         sizes.append(getStep(df))
     
     smallest_step = min(sizes)
-
+    colors = ['red', 'blue', 'green', 'orange']
     for df, name in dfs:
         df = df[df['step'] <= smallest_step]
-        plt.plot(df.step, df['mean'], label=name, alpha = 0.35)
+        plt.plot(df.step, df['mean'], alpha = 0.35)
         # plt.fill_between(df.step, df['mean'] - df['stderr'], df['mean'] + df['stderr'], alpha = 0.35)
         fitted = np.polyfit(df.step, df['mean'], 4)
         linear_model_fn=np.poly1d(fitted)
@@ -113,19 +113,26 @@ def save_data(df: pd.DataFrame, name: str):
 if __name__ == '__main__':
     base_path = 'C:\\Users\\Jelle\\Documents\\GitHub\\pydreamer_jelle\\mlruns\\0\\'
     
-    conv2d_instance_normd32_files = ['02898ba8445444bdb4846efaf4553bf9',
+    conv2d_instance_normd32_files   = ['02898ba8445444bdb4846efaf4553bf9',
                                     'ff62d5a41a69456aa1999681b2696a54',
                                     '14d8fd0e2ee3498ea110afdc2dffb1ee',
                                     '220c93533e824196b4b5bb0a5b8bafda',
                                     '3e949ec53ace489fb8f62185e35a5d13',
                                     ]
 
-    conv2d__noNorm_files= ['79e2e8a5383d4e0788dc1ac261cc3e5d',
-                           'b8d7ebcb9a4d4af28b352c8a3a4bdb17',
-                           '95bc6e5cd84443c9836c3955e8b56bec',
-                           '3f0b9ed2e5794443bbee013f04bc39cf',
-                           '90607139c2c64a9096f92206391972da',
-                            ]
+    conv2d__noNorm_files            = ['79e2e8a5383d4e0788dc1ac261cc3e5d',
+                                    'b8d7ebcb9a4d4af28b352c8a3a4bdb17',
+                                    '95bc6e5cd84443c9836c3955e8b56bec',
+                                    '3f0b9ed2e5794443bbee013f04bc39cf',
+                                    '90607139c2c64a9096f92206391972da',
+                                    ]
+
+    conv2d_instance_normd128_files  = ['1490bf98e0644ac2a4621acf0e1ae7fc',
+                                    '4f2c995841a24b20912d8e196d96abfb',
+                                    'cd920863d9224c979111dd1005091d63',
+                                    '993e250427a64da5bf803dc8cc2df93f',
+                                    '138b075d4f924db8a2161d8bb50068a0',
+                                    ]
 
     metrics = ['\\metrics\\_loss', '\\metrics\\agent\\policy_value', '\\metrics\\agent\\return']
 
@@ -135,21 +142,18 @@ if __name__ == '__main__':
     # calc_metrics(df_instance)
 
     # Run these three lines for saving something to a csv file
-    # df_conv2d = get_data(base_path, conv2d_instance_normd32_files, metric) 
-    # calc_metrics(df_conv2d)
-    # save_data(df_conv2d, 'conv2d_inst_d32_return')
+    # df_2dinstance_d128 = get_data(base_path, conv2d_instance_normd128_files, metric) 
+    # calc_metrics(df_2dinstance_d128)
+    # save_data(df_2dinstance_d128, 'conv2d_inst_d128_return')
     
-    df_dreamer          = load_from_csv('data/dreamer_normal.csv')
-    df_mean_instance    = load_from_csv('data/cnn_mean_instance.csv')
-    df_mean_noNorm      = load_from_csv('data/cnn_mean_only.csv')
-    df_2dinstance       = [load_from_csv('data/conv2d_inst_d32_loss.csv'), load_from_csv('data/conv2d_inst_d32_pv.csv'), load_from_csv('data/conv2d_inst_d32_return.csv')]
     df_2dnoNorm         = [load_from_csv('data/conv2d_noNorm_loss.csv'), load_from_csv('data/conv2d_noNorm_pv.csv'), load_from_csv('data/conv2d_noNorm_return.csv')]
-    df_3dinstance       = load_from_csv('data/3d_instancenorm.csv')
+    df_2dinstance       = [load_from_csv('data/conv2d_inst_d32_loss.csv'), load_from_csv('data/conv2d_inst_d32_pv.csv'), load_from_csv('data/conv2d_inst_d32_return.csv')]
+    df_2dinstance_d128  = [load_from_csv('data/conv2d_inst_d128_loss.csv'), load_from_csv('data/conv2d_inst_d128_pv.csv'), load_from_csv('data/conv2d_inst_d128_return.csv')]
 
     # plot_fitted_line(df_dreamer)
 
-    compare_two_runs(df_2dinstance[0], df_2dnoNorm[0], 'Loss')
-    compare_two_runs(df_2dinstance[1], df_2dnoNorm[1], 'Policy Value')
-    compare_two_runs(df_2dinstance[2], df_2dnoNorm[2], 'Return')
+    #compare_two_runs(df_2dinstance[0], df_2dnoNorm[0], 'Loss')
 
-    # compare_runs([(df_dreamer, 'dreamer'), (df_mean_instance, 'instance'), (df_mean_noNorm, 'mean only'), (df_2dinstance, '2d instance')])
+    compare_runs([(df_2dnoNorm[0], 'No normalization'), (df_2dinstance[0], 'Instance d32'), (df_2dinstance_d128[0], 'Instance d128')], 'Loss')
+    compare_runs([(df_2dnoNorm[1], 'No normalization'), (df_2dinstance[1], 'Instance d32'), (df_2dinstance_d128[1], 'Instance d128')], 'Policy Value')
+    compare_runs([(df_2dnoNorm[2], 'No normalization'), (df_2dinstance[2], 'Instance d32'), (df_2dinstance_d128[2], 'Instance d128')], 'Return')
